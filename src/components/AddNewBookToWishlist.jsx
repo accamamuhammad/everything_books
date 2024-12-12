@@ -1,17 +1,35 @@
 "use client";
 import React from "react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { app } from "../util/firebaseConfig";
+import { getDatabase, ref, set, push } from "firebase/database";
 
 const AddNewBookToWishlist = ({ onSendData }) => {
   const [BookName, setBookName] = useState("");
   const [BookCover, setBookCover] = useState(null);
   const [Preview, setPreview] = useState(null);
 
+  //* Add New Book To Database
+  const addDataToDatabase = async () => {
+    const db = getDatabase(app);
+    const newDocRef = push(ref(db, "wishlist"));
+    try {
+      await set(newDocRef, {
+        bookName: BookName,
+        bookCover: Preview,
+      });
+      alert("Data saved successfully");
+    } catch (error) {
+      console.error("Error saving data:", error);
+      alert("Failed to save data. Please try again.");
+    }
+  };
+
   //* Handle New Book
   const handleNewBook = () => {
     if (BookCover && BookName) {
-      // console.log(BookName, Preview);
-      onSendData(BookName, Preview);
+      addDataToDatabase();
+      onSendData(BookName, BookCover);
     }
   };
 
@@ -39,7 +57,7 @@ const AddNewBookToWishlist = ({ onSendData }) => {
   return (
     <div className="w-96 h-fit flex flex-col items-center gap-6 bg-slate-100 p-5 rounded-lg">
       <h1 className="font-bold text-xl text-center">Add New Book</h1>
-      {Preview && <img src={Preview} alt="File preview" />}
+      {/* {Preview && <img src={Preview} alt="File preview" />} */}
       <input
         type="text"
         placeholder="Enter Book Name"

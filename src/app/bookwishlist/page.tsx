@@ -1,12 +1,35 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
+import { app } from "../../util/firebaseConfig";
+import { getDatabase, ref, get } from "firebase/database";
 import AddNewBookToWishlist from "../../components/AddNewBookToWishlist";
 import BookWhishlist from "../../demoBooksWhishlist";
 
 const page = () => {
   const [addBookDisplay, setAddBookDisplay] = useState(false);
   const [currentDisplayBookState, setCurrentDisplayBookState] = useState("");
-  const [allBooks, setAllBooks] = useState(BookWhishlist);
+  const [allBooks, setAllBooks] = useState([{ bookName: "" }]);
+
+  //* Fetch Data from Database
+  const fetchData = async () => {
+    const db = getDatabase(app);
+    const dataRef = ref(db, "wishlist");
+    try {
+      const snapshot = await get(dataRef);
+      if (snapshot.exists()) {
+        setAllBooks(Object.values(snapshot.val()));
+      } else {
+        console.log("No data available or user not logged in");
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  //* Initiate Fetch Data
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   //* Handle Data from child components
   // To remove modal and add data
@@ -24,6 +47,7 @@ const page = () => {
   //* Close Modal
   useEffect(() => {
     setAddBookDisplay(false);
+    fetchData();
   }, [currentDisplayBookState]);
 
   //* Drag and drop
@@ -53,7 +77,7 @@ const page = () => {
               onDragOver={(e) => e.preventDefault()}
               className="cursor-pointer px-2 py-1.5 bg-slate-50 rounded-md text-sm font-medium"
             >
-              {item.name} <span>{item.price}</span>
+              {item.bookName} <span>{item.bookName}</span>
             </li>
           );
         })}
