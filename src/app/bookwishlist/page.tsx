@@ -1,14 +1,14 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
 import { app } from "../../util/firebaseConfig";
-import { getDatabase, ref, get } from "firebase/database";
+import { getDatabase, ref, get, remove } from "firebase/database";
 import AddNewBookToWishlist from "../../components/AddNewBookToWishlist";
-import BookWhishlist from "../../demoBooksWhishlist";
 
-const page = () => {
+const Page = () => {
   const [addBookDisplay, setAddBookDisplay] = useState(false);
-  const [currentDisplayBookState, setCurrentDisplayBookState] = useState("");
-  const [allBooks, setAllBooks] = useState([{ bookName: "" }]);
+  const [currentDisplayBookState, setCurrentDisplayBookState] =
+    useState<string>("");
+  const [allBooks, setAllBooks] = useState<any[]>([]);
 
   //* Fetch Data from Database
   const fetchData = async () => {
@@ -17,7 +17,14 @@ const page = () => {
     try {
       const snapshot = await get(dataRef);
       if (snapshot.exists()) {
-        setAllBooks(Object.values(snapshot.val()));
+        const myData = snapshot.val();
+        const tempArray = Object.keys(myData).map((myFileId) => {
+          return {
+            ...myData[myFileId],
+            bookId: myFileId,
+          };
+        });
+        setAllBooks(tempArray);
       } else {
         console.log("No data available or user not logged in");
       }
@@ -30,6 +37,14 @@ const page = () => {
   useEffect(() => {
     fetchData();
   }, []);
+
+  //* Delete Data
+  const deleteBook = async (bookIdPar: any) => {
+    const db = getDatabase(app);
+    const dataRef = ref(db, `wishlist/${bookIdPar}`);
+    await remove(dataRef);
+    window.location.reload();
+  };
 
   //* Handle Data from child components
   // To remove modal and add data
@@ -64,7 +79,7 @@ const page = () => {
 
   return (
     <div className="w-full h-screen flex gap-10 flex-col items-center justify-center">
-      <h1 className="text-2xl font-bold">Book Whishlist</h1>
+      <h1 className="text-2xl font-bold">Book Wishlist</h1>
       <ul className="space-y-4">
         {allBooks.map((item, index) => {
           return (
@@ -77,7 +92,13 @@ const page = () => {
               onDragOver={(e) => e.preventDefault()}
               className="cursor-pointer px-2 py-1.5 bg-slate-50 rounded-md text-sm font-medium"
             >
-              {item.bookName} <span>{item.bookName}</span>
+              {item.bookName}
+              <span
+                className="font-bold px-2"
+                onClick={() => deleteBook(item.bookId)}
+              >
+                X
+              </span>
             </li>
           );
         })}
@@ -93,4 +114,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;
