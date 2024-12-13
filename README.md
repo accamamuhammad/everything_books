@@ -9,3 +9,6 @@
 ### Key features
 
 1. Draggable list
+2. Create, Read, Update, Delete Books
+3. Set Price of book
+4. Need for the book based on color
