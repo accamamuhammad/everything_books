@@ -83,7 +83,7 @@ const Page = () => {
       <ul className="space-y-4">
         {allBooks.map((item, index) => {
           return (
-            <li
+            <div
               key={index}
               draggable
               onDragStart={() => (dragPerson.current = index)}
@@ -99,7 +99,7 @@ const Page = () => {
               >
                 X
               </span>
-            </li>
+            </div>
           );
         })}
       </ul>

@@ -33,7 +33,7 @@ const AddNewBookToWishlist = ({ onSendData }) => {
     }
   };
 
-  //* Handle File Change
+  //* Handle File Change (cover)
   const handleFileChange = (e) => {
     // console.log(e.target.files[0]);
     const file = e.target.files[0];
