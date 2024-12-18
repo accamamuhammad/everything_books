@@ -4,11 +4,17 @@ import { app } from "../../util/firebaseConfig";
 import { getDatabase, ref, get, remove } from "firebase/database";
 import AddNewBookToWishlist from "../../components/AddNewBookToWishlist";
 
+interface Book {
+  bookId: string;
+  bookName: string;
+  [key: string]: any;
+}
+
 const Page = () => {
   const [addBookDisplay, setAddBookDisplay] = useState(false);
   const [currentDisplayBookState, setCurrentDisplayBookState] =
     useState<string>("");
-  const [allBooks, setAllBooks] = useState<any[]>([]);
+  const [allBooks, setAllBooks] = useState<Book[]>([]);
 
   //* Fetch Data from Database
   const fetchData = async () => {

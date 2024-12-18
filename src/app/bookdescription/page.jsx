@@ -47,7 +47,7 @@ const page = () => {
             quia aliquam explicabo veritatis ut sint quos velit repudiandae
             nihil, quaerat similique nesciunt, vero consequuntur incidunt
             molestias fugiat laborum quia aliquam explicabo veritatis ut sint
-            quos velit repudiandae nihil, quaerat similique nesciunt?
+            quos velit repudiandae nihil, quaerat iunt?
           </p>
         </div>
       </div>
