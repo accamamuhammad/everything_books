@@ -62,17 +62,17 @@ const Page = () => {
     fetchData();
   }, [currentDisplayBookState]);
 
-  //* Drag and drop
-  const dragPerson = useRef < number > 0;
-  const draggedOverPerson = useRef < number > 0;
+  // //* Drag and drop
+  // const dragPerson = useRef(0);
+  // const draggedOverPerson = useRef(0);
 
-  const handleSort = () => {
-    const clone = [...allBooks];
-    const temp = clone[dragPerson.current];
-    clone[dragPerson.current] = clone[draggedOverPerson.current];
-    clone[draggedOverPerson.current] = temp;
-    setAllBooks(clone);
-  };
+  // const handleSort = () => {
+  //   const clone = [...allBooks];
+  //   const temp = clone[dragPerson.current];
+  //   clone[dragPerson.current] = clone[draggedOverPerson.current];
+  //   clone[draggedOverPerson.current] = temp;
+  //   setAllBooks(clone);
+  // };
 
   return (
     <div className="w-full h-screen relative flex gap-10 flex-col items-center justify-center">
@@ -82,11 +82,11 @@ const Page = () => {
           return (
             <div
               key={index}
-              draggable
-              onDragStart={() => (dragPerson.current = index)}
-              onDragEnter={() => (draggedOverPerson.current = index)}
-              onDragEnd={handleSort}
-              onDragOver={(e) => e.preventDefault()}
+              // draggable
+              // onDragStart={() => (dragPerson.current = index)}
+              // onDragEnter={() => (draggedOverPerson.current = index)}
+              // onDragEnd={handleSort}
+              // onDragOver={(e) => e.preventDefault()}
               className="cursor-pointer px-2 py-1.5 bg-slate-50 rounded-md text-sm font-medium"
             >
               {item.bookName}
