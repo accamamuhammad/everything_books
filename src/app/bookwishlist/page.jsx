@@ -4,17 +4,10 @@ import { app } from "../../util/firebaseConfig";
 import { getDatabase, ref, get, remove } from "firebase/database";
 import AddNewBookToWishlist from "../../components/AddNewBookToWishlist";
 
-interface Book {
-  bookId: string;
-  bookName: string;
-  [key: string]: any;
-}
-
 const Page = () => {
   const [addBookDisplay, setAddBookDisplay] = useState(false);
-  const [currentDisplayBookState, setCurrentDisplayBookState] =
-    useState<string>("");
-  const [allBooks, setAllBooks] = useState<Book[]>([]);
+  const [currentDisplayBookState, setCurrentDisplayBookState] = useState("");
+  const [allBooks, setAllBooks] = useState([]);
 
   //* Fetch Data from Database
   const fetchData = async () => {
@@ -45,7 +38,7 @@ const Page = () => {
   }, []);
 
   //* Delete Data
-  const deleteBook = async (bookIdPar: any) => {
+  const deleteBook = async (bookIdPar) => {
     const db = getDatabase(app);
     const dataRef = ref(db, `wishlist/${bookIdPar}`);
     await remove(dataRef);
@@ -54,7 +47,7 @@ const Page = () => {
 
   //* Handle Data from child components
   // To remove modal and add data
-  const handleData = (data: React.SetStateAction<any>) => {
+  const handleData = (data) => {
     setCurrentDisplayBookState(data);
   };
 
@@ -70,8 +63,8 @@ const Page = () => {
   }, [currentDisplayBookState]);
 
   //* Drag and drop
-  const dragPerson = useRef<number>(0);
-  const draggedOverPerson = useRef<number>(0);
+  const dragPerson = useRef < number > 0;
+  const draggedOverPerson = useRef < number > 0;
 
   const handleSort = () => {
     const clone = [...allBooks];
