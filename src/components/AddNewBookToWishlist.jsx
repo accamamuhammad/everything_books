@@ -6,6 +6,8 @@ import { getDatabase, ref, set, push } from "firebase/database";
 
 const AddNewBookToWishlist = ({ onSendData }) => {
   const [BookName, setBookName] = useState("");
+  const [BookAuthor, setBookAuthor] = useState("");
+  const [BookPrice, setBookPrice] = useState(0);
   const [BookCover, setBookCover] = useState(null);
   const [Preview, setPreview] = useState(null);
 
@@ -15,8 +17,10 @@ const AddNewBookToWishlist = ({ onSendData }) => {
     const newDocRef = push(ref(db, "wishlist"));
     try {
       await set(newDocRef, {
-        bookName: BookName,
         bookCover: Preview,
+        bookName: BookName,
+        bookAuthor: BookAuthor,
+        bookPrice: BookPrice,
       });
       alert("Data saved successfully");
     } catch (error) {
@@ -29,7 +33,7 @@ const AddNewBookToWishlist = ({ onSendData }) => {
   const handleNewBook = () => {
     if (BookCover && BookName) {
       addDataToDatabase();
-      onSendData(BookName, BookCover);
+      onSendData(BookName, BookAuthor, BookPrice, BookCover);
     }
   };
 
@@ -43,17 +47,6 @@ const AddNewBookToWishlist = ({ onSendData }) => {
     }
   };
 
-  //* Handle Book Change
-  const handleBookChange = (e) => {
-    let currentBook = e.target.value;
-
-    if (currentBook) {
-      setBookName(currentBook);
-    } else {
-      setBookName("Enter a book name");
-    }
-  };
-
   return (
     <div className="w-96 h-fit flex flex-col items-center gap-6 bg-slate-100 p-5 rounded-lg">
       <h1 className="font-bold text-xl text-center">Add New Book</h1>
@@ -61,7 +54,19 @@ const AddNewBookToWishlist = ({ onSendData }) => {
       <input
         type="text"
         placeholder="Enter Book Name"
-        onChange={(e) => handleBookChange(e)}
+        onChange={(e) => setBookName(e.target.value)}
+        className="w-full pl-2 py-1.5 rounded-md text-sm"
+      />
+      <input
+        type="text"
+        placeholder="Enter Book Author"
+        onChange={(e) => setBookAuthor(e.target.value)}
+        className="w-full pl-2 py-1.5 rounded-md text-sm"
+      />
+      <input
+        type="number"
+        placeholder="Enter Book Price"
+        onChange={(e) => setBookPrice(e.target.value)}
         className="w-full pl-2 py-1.5 rounded-md text-sm"
       />
       <input

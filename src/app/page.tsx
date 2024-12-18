@@ -1,25 +1,35 @@
 "use client";
+import Link from "next/link";
+import { useState, useEffect } from "react";
 import Nav from "../components/Nav";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faSearch } from "@fortawesome/free-solid-svg-icons";
-import { useState } from "react";
-import Link from "next/link";
+import { app } from "../util/firebaseConfig";
+import { getDatabase, ref, get } from "firebase/database";
 
 export default function Home() {
-  const [newBookDisplay, setNewBookDisplay] = useState(false);
+  const [bookWishlistList, setBookWishlistList] = useState<any>([]);
 
-  const testData = [
-    { name: "The little prince", author: "Antotne De Saint-Exuprry" },
-    { name: "The Kite Runner", author: "Khaleed Hussaini" },
-    { name: "Catcher in the Rye", author: "J.D. Salinger" },
-    { name: "Someone Like you", author: "Roald Dahi" },
-  ];
-
-  const handleOpenAddNewWishlist = () => {
-    setNewBookDisplay(!newBookDisplay);
+  //* Fetch Data from Database
+  const fetchData = async () => {
+    const db = getDatabase(app);
+    const dataRef = ref(db, "wishlist");
+    try {
+      const snapshot = await get(dataRef);
+      if (snapshot.exists()) {
+        setBookWishlistList(Object.values(snapshot.val()));
+        console.log(Object.values(snapshot.val()));
+      } else {
+        console.log("No Data Found");
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
   };
 
-  const handlePassBookData = (item: { name: string; author: string }) => {};
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   return (
     <main className="relative w-[550px] min-h-[100dvh] max-h-fit space-y-3.5 pb-5 bg-white">
@@ -55,16 +65,15 @@ export default function Home() {
           Book Wishlist
         </h1>
         <div className="w-full pl-7 no-scrollbar pb-2 gap-5 grid grid-col-2 grid-flow-col items-start overflow-x-auto">
-          {testData.map((item, index) => {
+          {bookWishlistList.map((item: any, index: number) => {
             return (
-              <div
-                onClick={() => handlePassBookData(item)}
-                key={index}
-                className="rounded-lg w-44 h-fit space-y-[1px]"
-              >
-                <div className="border rounded-lg mb-2 w-full h-[220px]"></div>
-                <h4 className="font-medium">{item.name}</h4>
-                <p className="opacity-65 text-xs">{item.author}</p>
+              <div key={index} className="rounded-lg w-48 h-fit space-y-0.5">
+                <div className="border rounded-lg mb-2 w-full h-[240px]"></div>
+                <h4 className="font-medium text-[15px]">{item.bookName}</h4>
+                <p className="opacity-65 text-xs">{item.bookAuthor}</p>
+                <p className="opacity-65 text-xs text-pink-500">
+                  N{item.bookPrice}
+                </p>
               </div>
             );
           })}
