@@ -15,13 +15,6 @@ export default function Home() {
     { name: "Someone Like you", author: "Roald Dahi" },
   ];
 
-  const testData2 = [
-    { name: "The little prince", author: "Antotne De Saint-Exuprry" },
-    { name: "The Kite Runner", author: "Khaleed Hussaini" },
-    { name: "Catcher in the Rye", author: "J.D. Salinger" },
-    { name: "Someone Like you", author: "Roald Dahi" },
-  ];
-
   const handleOpenAddNewWishlist = () => {
     setNewBookDisplay(!newBookDisplay);
   };
@@ -29,7 +22,8 @@ export default function Home() {
   const handlePassBookData = (item: { name: string; author: string }) => {};
 
   return (
-    <main className="relative w-full h-[100dvh] space-y-3.5 pb-10">
+    <main className="relative w-[550px] min-h-[100dvh] max-h-fit space-y-3.5 pb-5 bg-white">
+      {/* change width to w-full */}
       <div className="space-y-3.5">
         {/* Navigation */}
         <Nav />
@@ -58,7 +52,7 @@ export default function Home() {
       {/* Book Recommendations */}
       <div className="space-y-3.5">
         <h1 className="pl-7 font-medium text-[22px] underline underline-offset-4 decoration-pink-500">
-          Book Recommendations
+          Book Wishlist
         </h1>
         <div className="w-full pl-7 no-scrollbar pb-2 gap-5 grid grid-col-2 grid-flow-col items-start overflow-x-auto">
           {testData.map((item, index) => {
@@ -76,26 +70,14 @@ export default function Home() {
           })}
         </div>
       </div>
-      {/* Book Wishlist */}
-      <div className="space-y-3.5 pt-3">
-        <h1 className="pl-7 font-medium text-[22px] underline underline-offset-4 decoration-pink-500">
-          Book Wishlist
-        </h1>
-        <div className="w-full pl-7 no-scrollbar pb-2 gap-5 grid grid-col-2 grid-flow-col items-start overflow-x-auto">
-          {testData2.map((item, index) => {
-            return (
-              <div
-                onClick={() => handlePassBookData(item)}
-                key={index}
-                className="rounded-lg w-44 h-fit space-y-[1px]"
-              >
-                <div className="border rounded-lg mb-2 w-full h-[220px]"></div>
-                <h4 className="font-medium">{item.name}</h4>
-                <p className="opacity-65 text-xs">{item.author}</p>
-              </div>
-            );
-          })}
-        </div>
+      {/* Add new Books */}
+      <div className="w-full flex justify-end pt-2.5 pr-5">
+        <Link
+          href="/bookwishlist"
+          className="w-10 h-10 bg-pink-500 rounded-full flex items-center justify-center"
+        >
+          <FontAwesomeIcon icon={faPlus} color="white" size="lg" />
+        </Link>
       </div>
     </main>
   );

@@ -54,9 +54,7 @@ const Page = () => {
 
   //* Open Modal
   const handleAddNewBook = () => {
-    if (!addBookDisplay) {
-      setAddBookDisplay(true);
-    }
+    setAddBookDisplay(!addBookDisplay);
   };
 
   //* Close Modal
@@ -78,7 +76,7 @@ const Page = () => {
   };
 
   return (
-    <div className="w-full h-screen flex gap-10 flex-col items-center justify-center">
+    <div className="w-full h-screen relative flex gap-10 flex-col items-center justify-center">
       <h1 className="text-2xl font-bold">Book Wishlist</h1>
       <ul className="space-y-4">
         {allBooks.map((item, index) => {
@@ -109,7 +107,11 @@ const Page = () => {
       >
         Add Book
       </button>
-      {addBookDisplay ? <AddNewBookToWishlist onSendData={handleData} /> : ""}
+      <div
+        className={`${addBookDisplay ? "absolute w-screen h-screen flex items-center justify-center" : "hidden"}`}
+      >
+        {addBookDisplay ? <AddNewBookToWishlist onSendData={handleData} /> : ""}
+      </div>
     </div>
   );
 };
