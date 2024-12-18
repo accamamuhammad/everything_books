@@ -7,16 +7,8 @@ import { faPlus, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { app } from "../util/firebaseConfig";
 import { getDatabase, ref, get } from "firebase/database";
 
-type Book = {
-  bookName: string;
-  bookAuthor: string;
-  bookPrice: number;
-};
-
 export default function Home() {
-  const [bookWishlistList, setBookWishlistList] = useState<
-    Array<{ bookName: string; bookAuthor: string; bookPrice: number }>
-  >([]);
+  const [bookWishlistList, setBookWishlistList] = useState([]);
 
   //* Fetch Data from Database
   const fetchData = async () => {
@@ -26,6 +18,7 @@ export default function Home() {
       const snapshot = await get(dataRef);
       if (snapshot.exists()) {
         setBookWishlistList(Object.values(snapshot.val()));
+        console.log(Object.values(snapshot.val()));
       } else {
         console.log("No Data Found");
       }
@@ -72,7 +65,7 @@ export default function Home() {
           Book Wishlist
         </h1>
         <div className="w-full pl-7 no-scrollbar pb-2 gap-5 grid grid-col-2 grid-flow-col items-start overflow-x-auto">
-          {bookWishlistList.map((item: Book, index: number) => {
+          {bookWishlistList.map((item, index) => {
             return (
               <div key={index} className="rounded-lg w-48 h-fit space-y-0.5">
                 <div className="border rounded-lg mb-2 w-full h-[240px]"></div>
